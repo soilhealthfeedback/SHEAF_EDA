@@ -1,5 +1,3 @@
-# SHEAF_EDA
-
 SHEAF exploratory data analysis code
 =======
 
@@ -17,7 +15,8 @@ AGCENSUS
 
 SHEAF_agcensus_map.R:
 
-<bold>EXPLORATORY DATA ANALYSIS AND DATA EXTRACTION</bold>
+EXPLORATORY DATA ANALYSIS AND DATA EXTRACTION
+=======
 
 SHEAF_eda_studyarea.R:
 
