@@ -1,5 +1,6 @@
-#--SHEAF_eda.R
-#--loads some initial datasets and merges them, combines with spatial data for visualization
+#--SHEAF_eda_studyarea.R
+#--loads some data, subsets for 8 state region of
+#  Illinois, Indiana, Iowa, Michigan, Minnesota, Missouri, Ohio, and Wisconsin
 #--author: Erich Seamon, University of Idaho
 #--date: October 2018
 
@@ -18,16 +19,15 @@ library(maptools)
 #AGCENSUS
 
 #agcensus load via url - best if you are NOT on SESYNC rstudio server
-agcensus_download <- read.csv("https://nextcloud.sesync.org/index.php/s/THpGDspGXFtLSGF/download")
+agcensus <- read.csv("https://nextcloud.sesync.org/index.php/s/THpGDspGXFtLSGF/download")
 
 #agcensus load using csv - use if you ARE on SESYNC Rstudio server
-setwd("/nfs/soilsesfeedback-data/data/agcensus")
-agcensus <- read.csv("Agcensus2012.csv")
-agcensus_metadata <- read.csv("Agcensus2012_metadata.csv")
+#setwd("/nfs/soilsesfeedback-data/data/agcensus")
+#agcensus <- read.csv("Agcensus2012.csv")
+#agcensus_metadata <- read.csv("Agcensus2012_metadata.csv")
 
 
 #removes ancillary columns at the end of the agcensus
-agcensus_download <- agcensus_download[,1:25]
 agcensus <- agcensus[,1:25]
 
 #EQIP
@@ -36,31 +36,32 @@ agcensus <- agcensus[,1:25]
 eqip <- read.csv("https://nextcloud.sesync.org/index.php/s/bgWSzqdqYDifJwz/download")
 
 #eqip load using csv - use if you ARE on SESYNC Rstudio server
-setwd("/nfs/soilsesfeedback-data/data/eqip")
-eqip <- read.csv("eqip.csv")
+#setwd("/nfs/soilsesfeedback-data/data/eqip")
+#eqip <- read.csv("eqip.csv")
 
+#CENSUS
 
 #census load - best if you are NOT on SESYNC rstudio server
-census_download <- read.csv("https://nextcloud.sesync.org/index.php/s/C3jHtLfRToPkrJa/download")
+census <- read.csv("https://nextcloud.sesync.org/index.php/s/C3jHtLfRToPkrJa/download")
 
 #census load using csv - use if you ARE on SESYNC Rstudio server
-setwd("/nfs/soilsesfeedback-data/data/census")
-census <- read.csv("Census_States_CountyDem.csv")
+#setwd("/nfs/soilsesfeedback-data/data/census")
+#census <- read.csv("Census_States_CountyDem.csv")
 
+#RMA
 
-setwd("/nfs/soilsesfeedback-data/data/RMA")
-commodity <- read.csv("commodities.csv")
-damage <- read.csv("commodities_damagecause.csv")
+#RMA by commodity and damage cause, includes claim counts
+commodity <- read.csv("https://nextcloud.sesync.org/index.php/s/niLjWBSwmCoxQyC/download")
+damage <- read.csv("https://nextcloud.sesync.org/index.php/s/YErYqQYB9PAkmH9/download")
 
+#SPATIAL DATA FOR US COUNTIES CONUS
 
+temp <- tempfile()
+download.file("http://dmine.io/waf/SHEAF/spatial_data/counties_conus/counties_conus.zip",temp)
+outDir<-"/tmp"
+unzip(temp,exdir=outDir)
 
-#want to save the eqip data as an RDS file for faster usage?
-#saveRDS(eqip, file = "Eqip.rds")
-
-
-#load spatial county data
-
-setwd("/nfs/soilsesfeedback-data/data/counties")
+setwd("/tmp/counties_conus")
 
 counties_conus <- readShapePoly('UScounties_conus.shp',
                                 proj4string=CRS
