@@ -1,9 +1,10 @@
 # SHEAF_EDA
-<<<<<<< HEAD
+
 SHEAF exploratory data analysis code
 =======
 
-<bold>EQIP</bold>
+EQIP
+=======
 
 SHEAF_eqip_map.R:
 
@@ -11,7 +12,8 @@ SHEAF_eqip_barplot_year.R:
 
 SHEAF_eqip_barplot_practice.R:
 
-<bold>AGCENSUS</bond>
+AGCENSUS
+=======
 
 SHEAF_agcensus_map.R:
 
@@ -19,7 +21,8 @@ SHEAF_agcensus_map.R:
 
 SHEAF_eda_studyarea.R:
 
-<bold>NRI</bold>
+NRI
+=======
 
 SHEAF_NRI_map.R:
 
