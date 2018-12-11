@@ -18,7 +18,7 @@ SHEAF_agcensus_map.R:
 EXPLORATORY DATA ANALYSIS AND DATA EXTRACTION
 =======
 
-SHEAF_eda_model_data_creation.R:
+SHEAF_model_data_creation.R:
 
 NRI
 =======
