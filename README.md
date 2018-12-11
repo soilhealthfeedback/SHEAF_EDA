@@ -1,4 +1,6 @@
 SHEAF exploratory data analysis code
+
+This repository is for SHEAF exploratory data analysis, and for exporting a combined dataset for model construction.  Each heading contains functions that produce analysis for a particular dataset.  Each function is named to describe the output it provides, along with the dataset type.
 =======
 
 EQIP
