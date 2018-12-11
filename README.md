@@ -48,7 +48,7 @@ Through EQIP, NRCS provides agricultural producers with financial resources and 
     If a particular practice is not present for the selected state - function will kick out a statement that says: "selected practice has no dollars paid for chosen state"
     
 
-SHEAF_eqip_barplot_practice.R:  this function creates a barplot of all farming practices for a state, for a range of years.  The function is used as such:
+**SHEAF_eqip_barplot_practice.R:**  this function creates a barplot of all farming practices for a state, for a range of years.  The function is used as such:
 
     SHEAF_eqip_barplot_practice("Idaho", 2005, 2010)
     
