@@ -14,9 +14,37 @@ This voluntary conservation programs helps producers make conservation work for 
 Through EQIP, NRCS provides agricultural producers with financial resources and one-on-one help to plan and implement improvements, or what NRCS calls conservation practices. Using these practices can lead to cleaner water and air, healthier soil and better wildlife habitat, all while improving agricultural operations. Through EQIP, you can voluntarily implement conservation practices, and NRCS co-invests in these practices with you.
 
 
-SHEAF_eqip_map.R:
+**SHEAF_eqip_map.R:**  This function maps EQIP farming practices, using leaflet.  The function can be called as such: 
 
-SHEAF_eqip_barplot_year.R:
+    SHEAF_eqip_map(2014, "Vegetative Barrier")
+    
+    WHERE: the first input is the year of EQIP, and the second is the farming practice.  A full list of all farming practices are below, and are also included in the header of the function.
+
+    # PRACTICES
+    #Forage and Biomass Planting                  Integrated Pest Management (IPM)            
+    #Residue Management, No-Till/Strip Till       Terrace                                     
+    #Prescribed Grazing                           Conservation Crop Rotation                  
+    #Grassed Waterway                             Residue Management, Seasonal                
+    #Residue Management, Mulch Till               Riparian Forest Buffer                      
+    #Filter Strip                                 Mulching                                    
+    #Cover Crop                                   Conservation Cover                          
+    #Windbreak/Shelterbelt Establishment          Hedgerow Planting                           
+    #Stripcropping                                Stripcropping, Field                        
+    #Riparian Herbaceous Cover                    Contour Buffer Strips                       
+    #Residue Management, Ridge Till               Transition to Organic Production            
+    #Long Term No. Till                           Riparian Buffers - Vegetative               
+    #Vegetative Barrier                           Residue and Tillage Management, No-Till     
+    #Contour Orchard and Other Perennial Crops    Alley Cropping                              
+    #Silvopasture Establishment                   Herbaceous Wind Barriers                    
+    #Residue and Tillage Management, Ridge Till   Residue and Tillage Management, Reduced Till
+    #Multi-Story Cropping                         Strip - Intercropping                       
+    #Restoration of Compacted Soils              
+
+
+**SHEAF_eqip_barplot_year.R:**  This function creates a barplot of all farming practices, by dollars paid, for a state, across all years.  The function can be used as such:
+    
+    SHEAF_eqip_barplot_year("Idaho")
+    
 
 SHEAF_eqip_barplot_practice.R:
 
