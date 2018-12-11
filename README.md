@@ -41,12 +41,18 @@ Through EQIP, NRCS provides agricultural producers with financial resources and 
     #Restoration of Compacted Soils              
 
 
-**SHEAF_eqip_barplot_year.R:**  This function creates a barplot of all farming practices, by dollars paid, for a state, across all years.  The function can be used as such:
+**SHEAF_eqip_barplot_year.R:**  This function creates a barplot of a particular farming practice, by dollars paid, for a state, across all years.  The function can be used as such:
     
-    SHEAF_eqip_barplot_year("Idaho")
+    SHEAF_eqip_barplot_year("Idaho", "Vegetative Barrier")
+    
+    If a particular practice is not present for the selected state - function will kick out a statement that says: "selected practice has no dollars paid for chosen state"
     
 
-SHEAF_eqip_barplot_practice.R:
+SHEAF_eqip_barplot_practice.R:  this function creates a barplot of all farming practices for a state, for a range of years.  The function is used as such:
+
+    SHEAF_eqip_barplot_practice("Idaho", 2005, 2010)
+    
+    The first year is the start year, the last year is the end year.  If a user wants only one year, start year and end year are the same.
 
 AGCENSUS
 =======
