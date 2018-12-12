@@ -18,7 +18,8 @@ Through EQIP, NRCS provides agricultural producers with financial resources and 
 
     SHEAF_eqip_map(2014, "Vegetative Barrier")
     
-    WHERE: the first input is the year of EQIP, and the second is the farming practice.  A full list of all farming practices are below, and are also included in the header of the function.
+    WHERE: the first input is the year of EQIP, and the second is the farming practice.  A full list of all farming practices are below, 
+    and are also included in the header of the function.
 
     # PRACTICES
     #Forage and Biomass Planting                  Integrated Pest Management (IPM)            
@@ -41,14 +42,17 @@ Through EQIP, NRCS provides agricultural producers with financial resources and 
     #Restoration of Compacted Soils              
 
 
-**SHEAF_eqip_barplot_year.R:**  This function creates a barplot of a particular farming practice, by dollars paid, for a state, across all years.  The function can be used as such:
+**SHEAF_eqip_barplot_year.R:**  This function creates a barplot of a particular farming practice, by dollars paid, for a state, across all years.  
+The function can be used as such:
     
     SHEAF_eqip_barplot_year("Idaho", "Vegetative Barrier")
     
-    If a particular practice is not present for the selected state - function will kick out a statement that says: "selected practice has no dollars paid for chosen state"
+    If a particular practice is not present for the selected state - function will kick out a statement that says: 
+    "selected practice has no dollars paid for chosen state"
     
 
-**SHEAF_eqip_barplot_practice.R:**  this function creates a barplot of all farming practices for a state, for a range of years.  The function is used as such:
+**SHEAF_eqip_barplot_practice.R:**  this function creates a barplot of all farming practices for a state, for a range of years.  
+The function is used as such:
 
     SHEAF_eqip_barplot_practice("Idaho", 2005, 2010)
     
