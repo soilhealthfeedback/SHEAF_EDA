@@ -78,7 +78,7 @@ for some factored columns, which means that, for that county/year/state combo, t
 
 Running the function generates a dataset that is placed in the /soilsesfeedback-data/Model_data folder.  This folder ONLY contains datasets generated
 using this function.  After generation, the dataset can then be called using the SHEAF_SEM model code, for analysis.  It can also be used in the 
-SHEAF SEM web tool - which runs an SEM model on a selected dataset (http://soilhealthfeedback.org/dashboards/SEM)
+SHEAF SEM web tool - which runs an SEM model on a selected dataset (http://soilhealthfeedback.org/sheaf-structural-equation-modeling-dashboard-alpha/)
 
 
 **SHEAF_model_data_creation.R:**  this function generates a crop-specific model output, by combining and aggregating a fixed list of datasets.  
