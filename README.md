@@ -61,17 +61,29 @@ The function is used as such:
 AGCENSUS
 =======
 
-SHEAF_agcensus_map.R:
-
-EXPLORATORY DATA ANALYSIS AND DATA EXTRACTION
-=======
-
-SHEAF_model_data_creation.R:
+**SHEAF_agcensus_map.R:**
 
 NRI
 =======
 
-SHEAF_NRI_map.R:
+**SHEAF_NRI_map.R:**
+
+
+EXPLORATORY DATA ANALYSIS AND DATA EXTRACTION
+
+The function below combines all datasets into one data frame.  datasets that have factors that are pertinent 
+(farming practices, types of ag census categories), are transformed into columns.  In this case, there are some values that are NA 
+for some factored columns, which means that, for that county/year/state combo, there was no value for that factor.
+
+Running the function generates a dataset that is placed in the /soilsesfeedback-data/Model_data folder.  This folder ONLY contains datasets generated
+using this function.  After generation, the dataset can then be called using the SHEAF_SEM model code, for analysis.  It can also be used in the 
+SHEAF SEM web tool - which runs an SEM model on a selected dataset (http://soilhealthfeedback.org/dashboards/SEM)
+
+=======
+
+**SHEAF_model_data_creation.R:**
+
+
 
 
 
