@@ -3,7 +3,30 @@
 #--author: Erich Seamon, University of Idaho
 #--date: October 2018
 
-SHEAF_eqip_barplot_year <- function() {
+# PRACTICES
+#Forage and Biomass Planting                  Integrated Pest Management (IPM)            
+#Residue Management, No-Till/Strip Till       Terrace                                     
+#Prescribed Grazing                           Conservation Crop Rotation                  
+#Grassed Waterway                             Residue Management, Seasonal                
+#Residue Management, Mulch Till               Riparian Forest Buffer                      
+#Filter Strip                                 Mulching                                    
+#Cover Crop                                   Conservation Cover                          
+#Windbreak/Shelterbelt Establishment          Hedgerow Planting                           
+#Stripcropping                                Stripcropping, Field                        
+#Riparian Herbaceous Cover                    Contour Buffer Strips                       
+#Residue Management, Ridge Till               Transition to Organic Production            
+#Long Term No. Till                           Riparian Buffers - Vegetative               
+#Vegetative Barrier                           Residue and Tillage Management, No-Till     
+#Contour Orchard and Other Perennial Crops    Alley Cropping                              
+#Silvopasture Establishment                   Herbaceous Wind Barriers                    
+#Residue and Tillage Management, Ridge Till   Residue and Tillage Management, Reduced Till
+#Multi-Story Cropping                         Strip - Intercropping                       
+#Restoration of Compacted Soils           
+
+#SHEAF_eqip_barplot_year <- function("Idaho", "Vegetative Barrier")
+  
+SHEAF_eqip_barplot_year <- function(state, practice) {
+  
   
   library(rgdal)
   library(leaflet)
@@ -32,17 +55,17 @@ SHEAF_eqip_barplot_year <- function() {
   eqip <- read.csv("https://nextcloud.sesync.org/index.php/s/bgWSzqdqYDifJwz/download")
   
   #eqip load using csv - use if you ARE on SESYNC Rstudio server
-  setwd("/nfs/soilsesfeedback-data/data/eqip")
-  eqip <- read.csv("eqip.csv")
+  #setwd("/nfs/soilsesfeedback-data/data/eqip")
+  #eqip <- read.csv("eqip.csv")
   
   #OR YOU MAY LOAD THE RDS FILE WHICH IS FASTER
-  setwd("/nfs/soilsesfeedback-data/data/eqip")
-  eqip <- readRDS("Eqip.rds")
+  #setwd("/nfs/soilsesfeedback-data/data/eqip")
+  #eqip <- readRDS("Eqip.rds")
   
   
-  print(unique(eqip$State))
+  #print(unique(eqip$State))
   
-  x <- readline("What STATE?")
+  #x <- readline("What STATE?")
   
   #----
   
@@ -62,20 +85,36 @@ SHEAF_eqip_barplot_year <- function() {
   projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
   
 
-  options(warn = oldw)
+
   
   #----
   
   #AGGREGATING EQIP - THIS CODE AGGREGATES EQIP DATA BY STATE, COUNTY, PLANNED YEAR, AND PRACTICE NAME---
   
-  eqip_aggregated <- aggregate(eqip$Dollars.Paid, by=list(eqip$State, eqip$County, eqip$planned_year, eqip$practice_name), FUN = "sum")
+  eqip_aggregated <- aggregate(eqip$Dollars.Paid, by=list(eqip$State, eqip$County, eqip$Applied.Year, eqip$practice_name), FUN = "sum")
   colnames(eqip_aggregated) <- c("State", "County", "Year", "Practice_Name", "Dollars_Paid")
   
   #USING THE NEWLY AGGREGATED EQIP FILE, SUBSET BASED ON PRACTICE AND YEAR, AND THEN RE-AGGREGATE BY STATE AND COUNTY  
   #THIS EXAMPLE SUBSETS FOR 2010, FOR RESIDUE MANAGEMENT, NO TILL/STRIP TILL, AND CONSERVATION COVER
   
-  eqip_practice <- subset(eqip_aggregated, State %in% c(x))
-  eqip_practice <- aggregate(eqip_practice$Dollars_Paid, by = list(eqip_practice$State, eqip_practice$Year), FUN = "sum")
+  eqip_practice <- subset(eqip_aggregated, State %in% c(state))
+  eqip_practice <- subset(eqip_practice, Practice_Name %in% c(practice))
+  
+  if(nrow(eqip_practice) == 0){ 
+    print("selected practice has no dollars paid for chosen state")
+    
+  } else {
+  
+  try(eqip_practice <- aggregate(eqip_practice$Dollars_Paid, by = list(eqip_practice$State, eqip_practice$Year), FUN = "sum"), silent = TRUE)
+  
+ 
+  
+  
+  options(warn = oldw)
+  
+  
+  
+  
   colnames(eqip_practice) <- c("State", "Year", "Dollars_Paid")
   
   #--need to deal with units ft vs acres
@@ -90,7 +129,7 @@ SHEAF_eqip_barplot_year <- function() {
   #eqip_practice$County <- tolower(eqip_practice$County)
   #eqip_practice$County <- sapply(eqip_practice$County, simpleCap)
   
-  return(barplot(eqip_practice$Dollars_Paid, names.arg = eqip_practice$Year, las = 3))
+  return(barplot(eqip_practice$Dollars_Paid, names.arg = eqip_practice$Year, las = 3, xlab = "Years", ylab = "Dollars Paid", main = paste("Dollars Paid for \n", practice, "\n for ", state, sep="")))
   
-  
+  }
 }

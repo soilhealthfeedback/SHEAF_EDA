@@ -8,9 +8,9 @@
 #"convtill_acres"        "convtill_acres.1"      "cc_farms"              "cc_acres"              "cc_avgfarm"  
 #"ditches_acres_avgfarm"
 #
-#-example: SHEAF_agcensus_map(2012, "tile_farms")
+#-example: SHEAF_agcensus_barplot_state(2012, "tile_farms")
 
-SHEAF_agcensus_map <- function(year, agcensuscontrols) {
+SHEAF_agcensus_barplot_state <- function(year, agcensuscontrols) {
 
 
 library(classInt)
@@ -75,39 +75,10 @@ id = 5:25
 xxx[id] = as.numeric(unlist(xxx[id]))
 
 
-m <- merge(counties, xxx, by=c("STATE_NAME", "NAME"))
-#m <- subset(m, tile_farms != 0)
-
-m <- subset(m, eval(parse(text=paste("m$", agcensuscontrols, sep=""))) != 0)
-
-palz1 <- rev(brewer.pal(9, "Spectral"))
-
-palz <- colorRampPalette(palz1)
-
-newone <- eval(parse(text=paste("m$", agcensuscontrols, sep="")))
-newone[is.na(newone)] <- 0
-
-palData <- classIntervals(newone, style="hclust")
-colors <- findColours(palData, palz(100))
+xxx_new <- aggregate(eval(parse(text=paste("xxx$", agcensuscontrols, sep=""))), by = list(xxx$STATE_NAME), FUN = "sum")
+colnames(xxx_new) <- c("State", agcensuscontrols)
 
 
-#pal <- colorNumeric(palette = c("white", "orange", "darkorange", "red", "darkred"),
-#                    domain = eval(parse(text=paste("m$",input$agcensuscontrols , sep=""))))
-
-pal2 <- colorNumeric(rev(brewer.pal(9, "Spectral")), na.color = "#ffffff",
-                     domain = newone)
-
-
-
-exte <- as.vector(extent(states))
-
-label <- paste(sep = "<br/>", m$STATE_NAME, round(newone, 0))
-markers <- data.frame(label)
-labs <- as.list(newone)
-
-
-leaflet(data = m) %>% addProviderTiles("Stamen.TonerLite") %>% fitBounds(exte[1], exte[3], exte[2], exte[4]) %>% addPolygons(color = ~pal2(newone), popup = markers$label,  weight = 1) %>%
-  addLegend(pal = pal2, values = ~newone, opacity = 1, title = NULL,
-            position = "bottomright")
+return(barplot(eval(parse(text=paste("xxx_new$", agcensuscontrols, sep=""))), names.arg = xxx_new$State, las = 3))
 
 }
