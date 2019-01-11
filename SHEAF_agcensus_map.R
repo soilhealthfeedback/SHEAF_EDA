@@ -1,4 +1,5 @@
 #-SHEAF_agcensus_map.R
+#County Level Conservation Practices
 #-plots a map of a particular year of agcensus data - only works with 2012 right now
 #-agcensus controls include:
 #   
@@ -59,7 +60,7 @@ options(warn = oldw)
 
 #--
 
-n1 <- read.csv("https://nextcloud.sesync.org/index.php/s/THpGDspGXFtLSGF/download", header=TRUE)
+n1 <- read.csv("https://nextcloud.sesync.org/index.php/s/mdy8q3MWcZ9iLms/download", header=TRUE)
 n1 <- n1[,1:25]
 
 
@@ -101,13 +102,14 @@ pal2 <- colorNumeric(rev(brewer.pal(9, "Spectral")), na.color = "#ffffff",
 
 exte <- as.vector(extent(states))
 
-label <- paste(sep = "<br/>", m$STATE_NAME, round(newone, 0))
+label <- paste(sep = "<br/>", m$STATE_NAME, m$NAME, round(newone, 0))
 markers <- data.frame(label)
 labs <- as.list(newone)
 
+title <- "TEST"
 
 leaflet(data = m) %>% addProviderTiles("Stamen.TonerLite") %>% fitBounds(exte[1], exte[3], exte[2], exte[4]) %>% addPolygons(color = ~pal2(newone), popup = markers$label,  weight = 1) %>%
-  addLegend(pal = pal2, values = ~newone, opacity = 1, title = NULL,
-            position = "bottomright")
+  addLegend(pal = pal2, values = ~newone, opacity = 1, title = paste("Agcensus <br>", year, "<br>", "number of ", agcensuscontrols, sep=""),
+            position = "bottomleft")
 
 }

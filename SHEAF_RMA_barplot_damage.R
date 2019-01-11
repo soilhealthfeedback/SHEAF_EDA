@@ -1,4 +1,4 @@
-#--SHEAF_RMA_map.R
+#--SHEAF_RMA_barplot_damage.R
 #--loads some RMA dataset and merges, combines with spatial data for visualization
 #--author: Erich Seamon, University of Idaho
 #--date: October 2018
@@ -108,9 +108,9 @@
 #Falling Numbers                   Federal or State Ordered Destruct
 #
 #USAGE: 
-#  SHEAF_RMA_map(2014, "WHEAT", "Drought")
+#  SHEAF_RMA_barplot_damage(2014, "WHEAT")
 
-SHEAF_RMA_map <- function(year, crop, damagecause) {
+SHEAF_RMA_barplot_damage <- function(year, crop) {
 
 library(rgdal)
 library(leaflet)
@@ -165,110 +165,17 @@ library(tidyr)
  
  damage <- subset(damage, Year == year)
  
-
- damage <- subset(damage, Damagecause == damagecause)
- 
  if(nrow(damage) == 0){ 
    print("selected damage cause has no loss for the selected year and commodity")
    
  } else {
  
- damage <- try(aggregate(damage$Loss_damagecause, by = list(damage$State, damage$County), FUN = "sum"), silent = TRUE)
+   
+damage <- aggregate(damage$Loss_damagecause, by = list(damage$Damagecause), FUN = "sum")   
+colnames(damage) <- c("Damage", "Loss")
+
+return(barplot(damage$Loss, names.arg = damage$Damage, las = 3))
+   
+}}
  
-
  
- 
-#----
-
-#SUPRESS WARNINGS FOR READSHAPEPOLY DEPRECATION---
-
-oldw <- getOption("warn")
-options(warn = -1)
-
-
-#LOAD SPATIAL COUNTY DATA FOR THE ENTIRE US from URL
-
-temp <- tempfile()
-download.file("https://nextcloud.sesync.org/index.php/s/paxKXxFGnZaHbbN/download",temp)
-outDir<-"/tmp"
-unzip(temp,exdir=outDir)
-
-counties_conus <- readShapePoly('/tmp/UScounties_conus.shp',
-                                proj4string=CRS
-                                ("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
-projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-
-options(warn = oldw)
-
-#---
-
-#RENAME STATE COLUMN TO MATCH WITH SPATIAL FILE---
-
-colnames(damage)[2] <- "NAME"
-colnames(damage)[1] <- "STATE_NAME"
-colnames(damage)[3] <- "Loss"
-#----
-
-#NOW LETS MERGE THE FILES SO WE CAN PLOT MAPS AS NEEDED---
-
-m <- merge(counties_conus, damage, by=c("STATE_NAME", "NAME"), duplicateGeoms = TRUE)
-
-#----
-
-#SET UP COLOR PALETTE---
-
-palz1 <- brewer.pal(9, "GnBu")
-
-palz <- colorRampPalette(palz1)
-
-#----
-
-#SET NA TO ZERO AND MAKE NUMERIC---
-
-m$Dollars_Paid[is.na(m$Loss)] <- 0 
-m$Dollars_Paid <- as.numeric(m$Loss)
-
-#----
-
-
-#SET UP THE INTERVALS FOR THE COLOR PALETTE USING A HIEARCHICAL CLUSTERING MECHANSIM TO DIVIDE THE VARIABLE THAT IS DISPLAYED---
-m <- subset(m, Loss != 0)
-palData <- classIntervals(eval(parse(text=paste("m$", "Loss", sep=""))), style="jenks")
-colors <- findColours(palData, palz(100))
-
-#----
-
-#ASSIGN A COLOR USING THE PALETTE BY A RANGE---
-
-pal2 <- colorNumeric(rev(brewer.pal(9, "Spectral")), na.color = "#ffffff",
-                     domain = eval(parse(text=paste("m$", "Loss", sep=""))))
-
-#----
-
-
-#SET THE EXTENT OF THE MAP---
-
-exte <- as.vector(extent(counties_conus))
-
-#----
-
-#SET UP LABELING SO IF WE HOVER WE SEE INFORMATION---
-
-label <- paste(sep = "<br/>", m$STATE_NAME, round(eval(parse(text=paste("m$", "Loss", sep=""))), 0))
-markers <- data.frame(label)
-labs <- as.list(eval(parse(text=paste("m$", "Loss", sep=""))))
-
-#----
-
-#NOW USE LEAFLET TO ACTUALLY DRAW THE MAP---
-
-leaflet(data = m) %>% addProviderTiles("Stamen.TonerLite") %>% fitBounds(exte[1], exte[3], exte[2], exte[4]) %>% addPolygons(color = ~pal2(eval(parse(text=paste("m$", "Dollars_Paid", sep="")))), popup = markers$label,  weight = 1) %>%
-  addLegend(pal = pal2, values = ~eval(parse(text=paste("m$", "Loss", sep=""))), opacity = 1, title = paste("RMA ", year, " <br>", crop, " <br>", damagecause, sep=""),
-            position = "bottomleft")
-
-#----
-
-}
-
-}
-

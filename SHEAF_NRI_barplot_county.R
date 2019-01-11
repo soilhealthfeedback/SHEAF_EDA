@@ -1,4 +1,4 @@
-#--SHEAF_NRI_county_map.R
+#--SHEAF_NRI_barplot_county.R
 #--loads some NRI dataset, combines with spatial data for visualization
 #--author: Erich Seamon, University of Idaho
 #--date: October 2018
@@ -106,11 +106,11 @@
 # 1987 1992 1997 2002 2007 2012
 #
 #USAGE: 
-#  SHEAF_NRI_county_barplot(State, County, NRIoption)
+#  SHEAF_NRI_barplot_county(State, County, NRIoption)
 #
 #  SHEAF_NRI_county_barplot(California, Marin, "Brd_Total_Surface_Estimate")
 
-SHEAF_NRI_county_barplot <- function(state, county, NRIoption) {
+SHEAF_NRI_barplot_county <- function(state, county, NRIoption) {
   
   library(rgdal)
   library(leaflet)

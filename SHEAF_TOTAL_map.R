@@ -51,7 +51,13 @@ library(raster)
 #EQIP---
 
 #eqip load via url - best if you are NOT on SESYNC rstudio server
-eqip <- read.csv("https://nextcloud.sesync.org/index.php/s/bgWSzqdqYDifJwz/download")
+total_assets_bycounty <- read.csv("https://nextcloud.sesync.org/index.php/s/3yoZzjJnZzKnEBR/download")
+total_operatingexpenses_bycounty <- read.csv("https://nextcloud.sesync.org/index.php/s/ezq9SQJfc5pcRmg/download")
+total_rentalincome_bycounty <- read.csv("https://nextcloud.sesync.org/index.php/s/BbDMykQdbD8GjYD/download")
+
+m1 <- merge(total_assets_bycounty, total_operatingexpenses_bycounty, by = c("State", "County", "Year", "Ag.District"))
+m2 <- merge(m1, total_rentalincome_bycounty, by = c("State", "County", "Year", "Ag.District"))
+
 
 #eqip load using csv - use if you ARE on SESYNC Rstudio server
 #setwd("/nfs/soilsesfeedback-data/data/eqip")

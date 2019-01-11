@@ -1,4 +1,4 @@
-#-SHEAF_agcensus_map.R
+#-SHEAF_agcensus_barplot_state.R
 #-plots a map of a particular year of agcensus data - only works with 2012 right now
 #-agcensus controls include:
 #   
@@ -79,6 +79,8 @@ xxx_new <- aggregate(eval(parse(text=paste("xxx$", agcensuscontrols, sep=""))), 
 colnames(xxx_new) <- c("State", agcensuscontrols)
 
 
-return(barplot(eval(parse(text=paste("xxx_new$", agcensuscontrols, sep=""))), names.arg = xxx_new$State, las = 3))
+return(barplot(eval(parse(text=paste("xxx_new$", agcensuscontrols, sep=""))), names.arg = xxx_new$State, las = 3, xlab = "", ylab = paste("Number of ", agcensuscontrols, sep=""), main = paste("Agcensus ", year, " for ", agcensuscontrols, sep="")) %>%
+mtext(text = c("States"), side=1, line=9)
+)
 
 }
