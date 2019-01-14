@@ -28,7 +28,7 @@ library(raster)
   }
 
   temp <- tempfile()
-  download.file("https://nextcloud.sesync.org/index.php/s/ZgwtMn5cTnCocdR/download",temp)
+  download.file("https://nextcloud.sesync.org/index.php/s/c6PqRMiek4gDyGx/download",temp)
   outDir<-"/tmp"
   unzip(temp,exdir=outDir)
   
@@ -45,7 +45,7 @@ library(raster)
 
 
 temp <- tempfile()
-download.file("https://nextcloud.sesync.org/index.php/s/paxKXxFGnZaHbbN/download",temp)
+download.file("https://nextcloud.sesync.org/index.php/s/SDJ5P4R6DDmt4FF/download",temp)
 outDir<-"/tmp"
 unzip(temp,exdir=outDir)
 
@@ -60,7 +60,7 @@ options(warn = oldw)
 
 #--
 
-n1 <- read.csv("https://nextcloud.sesync.org/index.php/s/mdy8q3MWcZ9iLms/download", header=TRUE)
+n1 <- read.csv("https://nextcloud.sesync.org/index.php/s/SFiSow3f4aSTdCK/download", header=TRUE)
 n1 <- n1[,1:25]
 
 

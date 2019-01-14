@@ -23,7 +23,7 @@
 #Multi-Story Cropping                         Strip - Intercropping                       
 #Restoration of Compacted Soils           
 
-#SHEAF_eqip_barplot_year <- function("Idaho", "Vegetative Barrier")
+#SHEAF_eqip_barplot_year("Idaho", "Vegetative Barrier")
   
 SHEAF_eqip_barplot_year <- function(state, practice) {
   
@@ -52,7 +52,7 @@ SHEAF_eqip_barplot_year <- function(state, practice) {
   #EQIP---
   
   #eqip load via url - best if you are NOT on SESYNC rstudio server
-  eqip <- read.csv("https://nextcloud.sesync.org/index.php/s/bgWSzqdqYDifJwz/download")
+  eqip <- read.csv("https://nextcloud.sesync.org/index.php/s/os5ZxFXAAEgc2y4/download")
   
   #eqip load using csv - use if you ARE on SESYNC Rstudio server
   #setwd("/nfs/soilsesfeedback-data/data/eqip")
@@ -72,8 +72,12 @@ SHEAF_eqip_barplot_year <- function(state, practice) {
   
   #LOAD SPATIAL COUNTY DATA FOR THE ENTIRE US---
   
-  setwd("/nfs/soilsesfeedback-data/data/counties")
+  temp <- tempfile()
+  download.file("https://nextcloud.sesync.org/index.php/s/SDJ5P4R6DDmt4FF/download",temp)
+  outDir<-"/tmp"
+  unzip(temp,exdir=outDir)
   
+  setwd("/tmp/counties_conus")  
   
   oldw <- getOption("warn")
   options(warn = -1)

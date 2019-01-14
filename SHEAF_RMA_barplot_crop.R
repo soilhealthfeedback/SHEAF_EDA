@@ -110,7 +110,7 @@
 #USAGE: 
 #  SHEAF_RMA_barplot_crop(2014, "Washington", "Drought")
 
-SHEAF_RMA_barplot_crop <- function(year, state, damagecause) {
+SHEAF_RMA_barplot_crop <- function(year, damagecause, state) {
 
 library(rgdal)
 library(leaflet)
@@ -136,7 +136,7 @@ library(tidyr)
  #RMA COMMODITY
  
  #RMA by commodity and damage cause, includes claim counts
- commodity <- read.csv("https://nextcloud.sesync.org/index.php/s/niLjWBSwmCoxQyC/download")
+ commodity <- read.csv("https://nextcloud.sesync.org/index.php/s/TKKQqJQg2epBbsG/download")
  colnames(commodity) <- c("ID", "Year", "State", "County", "Commodity", "Loss_commodity", "Count_commodity")
  commodity$State <- state.name[match(commodity$State,state.abb)]
  
@@ -147,7 +147,7 @@ library(tidyr)
  #RMA DAMAGE
  
  #RMA by damage cause, includes claim counts
- damage <- read.csv("https://nextcloud.sesync.org/index.php/s/YErYqQYB9PAkmH9/download")
+ damage <- read.csv("https://nextcloud.sesync.org/index.php/s/Qc9JERtaATStGZa/download")
  colnames(damage) <- c("ID", "Year", "State", "County", "Commodity", "Damagecause", "Loss_damagecause", "Count_damagecause")
  damage$State <- state.name[match(damage$State,state.abb)]
  
@@ -176,11 +176,12 @@ library(tidyr)
 damage <- aggregate(damage$Loss_damagecause, by = list(damage$Commodity), FUN = "sum")   
 colnames(damage) <- c("Commodity", "Loss")
 
-par(mar=c(12.1,4.1,4.1,2.1))
+par(mar=c(18.1,4.1,4.1,2.1))
 options(scipen = 999)
 
-return(barplot(damage$Loss, names.arg = damage$Commodity, las = 3))
-   
+bar <- barplot(damage$Loss, names.arg = damage$Commodity, las = 3,  ylab = "Commodity Loss ($)", main = paste("RMA Commodities for ", year, ", ", state, sep=""))
+
+return(mtext(text = c("Commodities"), side=1, line=8, at = bar[5]))
 }}
  
  

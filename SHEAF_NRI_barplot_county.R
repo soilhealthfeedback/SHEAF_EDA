@@ -108,7 +108,7 @@
 #USAGE: 
 #  SHEAF_NRI_barplot_county(State, County, NRIoption)
 #
-#  SHEAF_NRI_county_barplot(California, Marin, "Brd_Total_Surface_Estimate")
+#  SHEAF_NRI_barplot_county("California", "Marin", "Brd_Total_Surface_Estimate")
 
 SHEAF_NRI_barplot_county <- function(state, county, NRIoption) {
   
@@ -132,16 +132,16 @@ SHEAF_NRI_barplot_county <- function(state, county, NRIoption) {
   
   #NRI---
   
- nri_tfact <- read.csv("https://nextcloud.sesync.org/index.php/s/wgk5q4oeGLLWngs/download", strip.white=TRUE)
+ nri_tfact <- read.csv("https://nextcloud.sesync.org/index.php/s/ESranGDWaMcyDNj/download", strip.white=TRUE)
  nri_tfact$Year <- c("2015")
  
- nri_prime <- read.csv("https://nextcloud.sesync.org/index.php/s/5r2CSg8n2rLaBdt/download", strip.white=TRUE)
- nri_lcc <- read.csv("https://nextcloud.sesync.org/index.php/s/x5BQrzDBPMfgc26/download", strip.white=TRUE)
- nri_irr <- read.csv("https://nextcloud.sesync.org/index.php/s/dXLkJpMW52pBbTF/download", strip.white=TRUE)
- nri_eros <- read.csv("https://nextcloud.sesync.org/index.php/s/jyKfrceCRdSyqcP/download", strip.white=TRUE)
- nri_dbl <- read.csv("https://nextcloud.sesync.org/index.php/s/N2nZAD4KbbpRCDJ/download", strip.white=TRUE)
- nri_crpcov <- read.csv("https://nextcloud.sesync.org/index.php/s/GSdrizSNgLRf3s6/download", strip.white=TRUE)
- nri_brd <- read.csv("https://nextcloud.sesync.org/index.php/s/jMXn6ZHW6B46eKr/download", strip.white=TRUE)
+ nri_prime <- read.csv("https://nextcloud.sesync.org/index.php/s/YQCjJzwztpSfwpe/download", strip.white=TRUE)
+ nri_lcc <- read.csv("https://nextcloud.sesync.org/index.php/s/RGb2eKkZtLpQ7X9/download", strip.white=TRUE)
+ nri_irr <- read.csv("https://nextcloud.sesync.org/index.php/s/8EwQkxxsXa6XaRb/download", strip.white=TRUE)
+ nri_eros <- read.csv("https://nextcloud.sesync.org/index.php/s/R8aASsxtMbiebYr/download", strip.white=TRUE)
+ nri_dbl <- read.csv("https://nextcloud.sesync.org/index.php/s/tnge8GngoS2ozKg/download", strip.white=TRUE)
+ nri_crpcov <- read.csv("https://nextcloud.sesync.org/index.php/s/GKroT2c8kRmHBPX/download", strip.white=TRUE)
+ nri_brd <- read.csv("https://nextcloud.sesync.org/index.php/s/CedCm5X2PR6T37x/download", strip.white=TRUE)
  
 nri_combined <-  Reduce(function(x,y) merge(x = x, y = y, by = c("State", "County", "Year", "Fips"), all = TRUE), 
         list(nri_tfact, nri_prime, nri_lcc, nri_irr, nri_eros, nri_dbl, nri_crpcov, nri_brd))
@@ -154,7 +154,8 @@ nri_combined <-  Reduce(function(x,y) merge(x = x, y = y, by = c("State", "Count
   nri_barplot <- subset(nri_combined, State == state & County == county)
   
   nri_barplot <- as.data.frame(nri_barplot)
-  return(barplot(as.numeric(eval(parse(text=paste("nri_barplot$", NRIoption, sep="")))), names.arg = nri_barplot$Year, las = 3, xlab = "Years", ylab = NRIoption, main = paste(NRIoption, " for ", county, " county, ", state, sep="")))
+  return(barplot(as.numeric(eval(parse(text=paste("nri_barplot$", NRIoption, sep="")))), names.arg = nri_barplot$Year, las = 3,  ylab = NRIoption, main = paste(NRIoption, " for ", county, " county, ", state, sep="")))
+  mtext(text = c("Years"), side=1, line=2)
   
  
   

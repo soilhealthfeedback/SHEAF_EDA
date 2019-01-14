@@ -26,7 +26,7 @@
 #Restoration of Compacted Soils              
 #
 #USAGE: 
-#  SHEAF_eqip_map(2014, "Vegetative Barrier")
+#  SHEAF_eqip_map(2014, "Cover Crop")
 
 SHEAF_eqip_map <- function(year,practice) {
 
@@ -51,8 +51,8 @@ library(raster)
 #EQIP---
 
 #eqip load via url - best if you are NOT on SESYNC rstudio server
-eqip <- read.csv("https://nextcloud.sesync.org/index.php/s/bgWSzqdqYDifJwz/download")
-
+eqip <- read.csv("https://nextcloud.sesync.org/index.php/s/os5ZxFXAAEgc2y4/download")
+ 
 #eqip load using csv - use if you ARE on SESYNC Rstudio server
 #setwd("/nfs/soilsesfeedback-data/data/eqip")
 #eqip <- read.csv("eqip.csv")
@@ -72,9 +72,11 @@ options(warn = -1)
 #LOAD SPATIAL COUNTY DATA FOR THE ENTIRE US from URL
 
 temp <- tempfile()
-download.file("https://nextcloud.sesync.org/index.php/s/paxKXxFGnZaHbbN/download",temp)
+download.file("https://nextcloud.sesync.org/index.php/s/SDJ5P4R6DDmt4FF/download",temp)
 outDir<-"/tmp"
 unzip(temp,exdir=outDir)
+
+setwd("/tmp/counties_conus")
 
 counties_conus <- readShapePoly('/tmp/UScounties_conus.shp',
                                 proj4string=CRS
@@ -82,6 +84,13 @@ counties_conus <- readShapePoly('/tmp/UScounties_conus.shp',
 projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
 
 options(warn = oldw)
+
+counties_conus <- subset(counties_conus, STATE_NAME != "Alaska")
+counties_conus <- subset(counties_conus, STATE_NAME != "Hawaii")
+counties_conus <- subset(counties_conus, STATE_NAME != "Caribbean Region")
+counties_conus <- subset(counties_conus, STATE_NAME != "Pacific Island Area")
+
+
 
 #---
 
@@ -94,6 +103,7 @@ colnames(eqip_aggregated) <- c("State", "County", "Year", "Practice_Name", "Doll
 #THIS EXAMPLE SUBSETS FOR 2010, FOR RESIDUE MANAGEMENT, NO TILL/STRIP TILL, AND CONSERVATION COVER
 
 eqip_practice <- subset(eqip_aggregated, Practice_Name %in% c(practice) & Year == year)
+
 eqip_practice <- aggregate(eqip_practice$Dollars_Paid, by = list(eqip_practice$State, eqip_practice$County, eqip_practice$Year, eqip_practice$Practice_Name), FUN = "sum")
 colnames(eqip_practice) <- c("State", "County", "Year", "Practice_Name", "Dollars_Paid")
 
@@ -120,7 +130,7 @@ colnames(eqip_practice)[1] <- "STATE_NAME"
 
 #NOW LETS MERGE THE FILES SO WE CAN PLOT MAPS AS NEEDED---
 
-m <- merge(counties_conus, eqip_practice, by=c("STATE_NAME", "NAME"), duplicateGeoms = TRUE)
+m <- merge(counties_conus, eqip_practice, by=c("STATE_NAME", "NAME"))
 
 #----
 

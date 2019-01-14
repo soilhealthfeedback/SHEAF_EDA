@@ -130,19 +130,19 @@ SHEAF_NRI_county_map <- function(year, NRIoption) {
   
   #NRI---
   
- nri_tfact <- read.csv("https://nextcloud.sesync.org/index.php/s/wgk5q4oeGLLWngs/download", strip.white=TRUE)
- nri_tfact$Year <- c("2015")
- 
- nri_prime <- read.csv("https://nextcloud.sesync.org/index.php/s/5r2CSg8n2rLaBdt/download", strip.white=TRUE)
- nri_lcc <- read.csv("https://nextcloud.sesync.org/index.php/s/x5BQrzDBPMfgc26/download", strip.white=TRUE)
- nri_irr <- read.csv("https://nextcloud.sesync.org/index.php/s/dXLkJpMW52pBbTF/download", strip.white=TRUE)
- nri_eros <- read.csv("https://nextcloud.sesync.org/index.php/s/jyKfrceCRdSyqcP/download", strip.white=TRUE)
- nri_dbl <- read.csv("https://nextcloud.sesync.org/index.php/s/N2nZAD4KbbpRCDJ/download", strip.white=TRUE)
- nri_crpcov <- read.csv("https://nextcloud.sesync.org/index.php/s/GSdrizSNgLRf3s6/download", strip.white=TRUE)
- nri_brd <- read.csv("https://nextcloud.sesync.org/index.php/s/jMXn6ZHW6B46eKr/download", strip.white=TRUE)
- 
-nri_combined <-  Reduce(function(x,y) merge(x = x, y = y, by = c("State", "County", "Year", "Fips"), all = TRUE), 
-        list(nri_tfact, nri_prime, nri_lcc, nri_irr, nri_eros, nri_dbl, nri_crpcov, nri_brd))
+  nri_tfact <- read.csv("https://nextcloud.sesync.org/index.php/s/ESranGDWaMcyDNj/download", strip.white=TRUE)
+  nri_tfact$Year <- c("2015")
+  
+  nri_prime <- read.csv("https://nextcloud.sesync.org/index.php/s/YQCjJzwztpSfwpe/download", strip.white=TRUE)
+  nri_lcc <- read.csv("https://nextcloud.sesync.org/index.php/s/RGb2eKkZtLpQ7X9/download", strip.white=TRUE)
+  nri_irr <- read.csv("https://nextcloud.sesync.org/index.php/s/8EwQkxxsXa6XaRb/download", strip.white=TRUE)
+  nri_eros <- read.csv("https://nextcloud.sesync.org/index.php/s/R8aASsxtMbiebYr/download", strip.white=TRUE)
+  nri_dbl <- read.csv("https://nextcloud.sesync.org/index.php/s/tnge8GngoS2ozKg/download", strip.white=TRUE)
+  nri_crpcov <- read.csv("https://nextcloud.sesync.org/index.php/s/GKroT2c8kRmHBPX/download", strip.white=TRUE)
+  nri_brd <- read.csv("https://nextcloud.sesync.org/index.php/s/CedCm5X2PR6T37x/download", strip.white=TRUE)
+  
+  nri_combined <-  Reduce(function(x,y) merge(x = x, y = y, by = c("State", "County", "Year", "Fips"), all = TRUE), 
+                          list(nri_tfact, nri_prime, nri_lcc, nri_irr, nri_eros, nri_dbl, nri_crpcov, nri_brd))
   
   #SUPRESS WARNINGS FOR READSHAPEPOLY DEPRECATION---
   
@@ -153,7 +153,7 @@ nri_combined <-  Reduce(function(x,y) merge(x = x, y = y, by = c("State", "Count
   #LOAD SPATIAL COUNTY DATA FOR THE ENTIRE US from URL
   
   temp <- tempfile()
-  download.file("https://nextcloud.sesync.org/index.php/s/paxKXxFGnZaHbbN/download",temp)
+  download.file("https://nextcloud.sesync.org/index.php/s/c6PqRMiek4gDyGx/download",temp)
   outDir<-"/tmp"
   unzip(temp,exdir=outDir)
   

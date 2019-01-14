@@ -36,7 +36,7 @@ SHEAF_NRI_state_map <- function(year, NRIoption) {
   #NRI---
   
   #eqip load via url - best if you are NOT on SESYNC rstudio server
-  nri <- read.csv("https://nextcloud.sesync.org/index.php/s/p98ioxi2xZXZepg/download")
+  nri <- read.csv("https://nextcloud.sesync.org/index.php/s/PaXLP6BmyPKHA3R/download")
   
   #eqip load using csv - use if you ARE on SESYNC Rstudio server
   #setwd("/nfs/soilsesfeedback-data/data/eqip")
@@ -57,7 +57,7 @@ SHEAF_NRI_state_map <- function(year, NRIoption) {
   #LOAD SPATIAL COUNTY DATA FOR THE ENTIRE US from URL
   
   temp <- tempfile()
-  download.file("https://nextcloud.sesync.org/index.php/s/ZgwtMn5cTnCocdR/download",temp)
+  download.file("https://nextcloud.sesync.org/index.php/s/c6PqRMiek4gDyGx/download",temp)
   outDir<-"/tmp"
   unzip(temp,exdir=outDir)
   

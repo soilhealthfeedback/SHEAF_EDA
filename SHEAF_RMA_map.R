@@ -136,7 +136,7 @@ library(tidyr)
  #RMA COMMODITY
  
  #RMA by commodity and damage cause, includes claim counts
- commodity <- read.csv("https://nextcloud.sesync.org/index.php/s/niLjWBSwmCoxQyC/download")
+ commodity <- read.csv("https://nextcloud.sesync.org/index.php/s/TKKQqJQg2epBbsG/download")
  colnames(commodity) <- c("ID", "Year", "State", "County", "Commodity", "Loss_commodity", "Count_commodity")
  commodity$State <- state.name[match(commodity$State,state.abb)]
  
@@ -147,7 +147,7 @@ library(tidyr)
  #RMA DAMAGE
  
  #RMA by damage cause, includes claim counts
- damage <- read.csv("https://nextcloud.sesync.org/index.php/s/YErYqQYB9PAkmH9/download")
+ damage <- read.csv("https://nextcloud.sesync.org/index.php/s/Qc9JERtaATStGZa/download")
  colnames(damage) <- c("ID", "Year", "State", "County", "Commodity", "Damagecause", "Loss_damagecause", "Count_damagecause")
  damage$State <- state.name[match(damage$State,state.abb)]
  
@@ -189,9 +189,11 @@ options(warn = -1)
 #LOAD SPATIAL COUNTY DATA FOR THE ENTIRE US from URL
 
 temp <- tempfile()
-download.file("https://nextcloud.sesync.org/index.php/s/paxKXxFGnZaHbbN/download",temp)
+download.file("https://nextcloud.sesync.org/index.php/s/SDJ5P4R6DDmt4FF/download",temp)
 outDir<-"/tmp"
 unzip(temp,exdir=outDir)
+
+setwd("/tmp/counties_conus")
 
 counties_conus <- readShapePoly('/tmp/UScounties_conus.shp',
                                 proj4string=CRS
