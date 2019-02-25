@@ -20,13 +20,13 @@
 
 netcdf_access <- function(climatevar_short, climatevar, year) {
   
-  library("ncdf")
+  #library("ncdf")
   library("zoo")
   library("raster")
   library("sp")
   library("rgeos")
   library("rgdal")
-  #library("proj4")
+  library("proj4")
   library("RNetCDF")
   library("ncdf4")
   library("RColorBrewer")
@@ -35,27 +35,19 @@ netcdf_access <- function(climatevar_short, climatevar, year) {
   library("latticeExtra")
   library("maptools")
   library("parallel")
-  #library("Evapotranspiration")
+  library("Evapotranspiration")
   library("plyr")
   library("data.table")
-  #library("sirad")
+  library("sirad")
   library("rgdal")
   library("stringr")
   
+  setwd("/nethome/erichs/counties/")
   
-  
-  temp <- tempfile()
-  download.file("https://nextcloud.sesync.org/index.php/s/SDJ5P4R6DDmt4FF/download",temp)
-  outDir<-"/tmp"
-  unzip(temp,exdir=outDir)
-  
-  setwd("/tmp/counties_conus")
-  
-  counties <- readShapePoly('UScounties_conus.shp',
+  counties <- readShapePoly('UScounties.shp', 
                             proj4string=CRS
                             ("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
   projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-  
   
   #subsets to CONUS
   counties <- subset(counties, STATE_NAME != "Alaska")
@@ -140,6 +132,8 @@ netcdf_access <- function(climatevar_short, climatevar, year) {
   nm2$FIPS <- str_pad(nm2$FIPS, 5, pad = "0")
   
   pdsi <- merge(counties, nm2, by = "FIPS")
+  
+  
   
   #--map it
   

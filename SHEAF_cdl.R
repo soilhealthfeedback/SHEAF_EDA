@@ -96,7 +96,7 @@ counties <- readShapePoly('UScounties_conus.shp',
 projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
 
 
-
+#write.csv(cdlsum6, file = "/nfs/soilsesfeedback-data/data/cdl/crop_diversity.csv")
 
 cdlsum7 <- subset(cdlsum6, Year == year)
 
