@@ -20,7 +20,7 @@ countyFIPS <- read.csv("https://nextcloud.sesync.org/index.php/s/wcFmKrSZW6Pr6D2
 countyFIPS$FIPS <- sprintf("%05d",countyFIPS$FIPS)
 colnames(countyFIPS) <- c("ID", "State", "County", "FIPS")
 
-census2 <- merge(census, countyFIPS, by  = c("State", "County"))
+census2 <- plyr::join(census, countyFIPS, by  = c("State", "County"))
 
 census3 <- census2 %>%
   select(Year, FIPS, Data.Item, Domain, Value) 
