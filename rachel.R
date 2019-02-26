@@ -1,3 +1,8 @@
+library(pheatmap)
+library(dplyr)
+library(diverse)
+library(PANDA)
+
 simpleCap <- function(x) {
   s <- strsplit(x, " ")[[1]]
   paste(toupper(substring(s, 1,1)), substring(s, 2),
@@ -23,18 +28,37 @@ colnames(countyFIPS) <- c("ID", "State", "County", "FIPS")
 census2 <- plyr::join(census, countyFIPS, by  = c("State", "County"))
 
 census3 <- census2 %>%
-  select(Year, FIPS, Data.Item, Domain, Value) 
+  select(FIPS, Year, Data.Item, Value) 
+census4 <- na.omit(census3) 
+census5 <- census4[ which(census4$Data.Item == c("OPERATORS, AMERICAN INDIAN OR ALASKA NATIVE - NUMBER OF OPERATORS", 
+                                                 "OPERATORS, BLACK OR AFRICAN AMERICAN - NUMBER OF OPERATORS",
+                                                 "OPERATORS, HISPANIC - NUMBER OF OPERATORS",
+                                                 "OPERATORS, MULTI-RACE - NUMBER OF OPERATORS",
+                                                 "OPERATORS, ASIAN - NUMBER OF OPERATORS",
+                                                 "OPERATORS, NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER - NUMBER OF OPERATORS",
+                                                 "OPERATORS, WHITE - NUMBER OF OPERATORS")), ]
 
-head(census3)
 
-library(pheatmap)
-colfunc <- colorRampPalette(c("deepskyblue4", "deepskyblue", "cyan"))
-plot_mat <- function(census3)
-  pheatmap(census3, colfunc(100), cluster_rows = FALSE, cluster_cols = FALSE)
-col_l <- names(sort(colSums(values(census3)))) #order
-row_l <- names(sort(rowSums(values(census3)), decreasing = TRUE))
-plot_mat(values(census3)[row_l,col_l])
-plot_mat(values(census3, norm = 'p')[row_l,col_l])
-plot_mat(values(census3, norm = 'rca')[row_l,col_l])
-plot_mat(values(census3, norm = 'rca', filter = 1)[row_l,col_l])
-?pheatmap
+
+census2002 <- census5[ which(census5$Year=='2002'), ] #select for only 2002  
+                                                     #eliminate rows with NAs in FIPS
+census2002 <- census2002 %>%
+  select(FIPS, Data.Item, Value)                     #reduce to 3 variables
+
+census2007 <- census5[ which(census5$Year=='2007'), ] #select for only 2002  
+#eliminate rows with NAs in FIPS
+census2007 <- census2007 %>%
+  select(FIPS, Data.Item, Value)                     #reduce to 3 variables
+
+census2012 <- census5[ which(census5$Year=='2012'), ] #select for only 2002  
+#eliminate rows with NAs in FIPS
+census2012 <- census2012 %>%
+  select(FIPS, Data.Item, Value)                     #reduce to 3 variables
+
+div2002 <- diversity(census2002, type = "simpson")   #saves diversity measures as dataframe
+div2007 <- diversity(census2007, type = "simpson")
+div2012 <- diversity(census2012, type = "simpson")
+
+head(div2002)
+DIV2002_2007 <- merge(div2002, div2007, )
+head(alldiv)
