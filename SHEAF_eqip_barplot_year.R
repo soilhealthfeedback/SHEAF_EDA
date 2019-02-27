@@ -72,18 +72,18 @@ SHEAF_eqip_barplot_year <- function(state, practice) {
   
   #LOAD SPATIAL COUNTY DATA FOR THE ENTIRE US---
   
-  temp <- tempfile()
-  download.file("https://nextcloud.sesync.org/index.php/s/SDJ5P4R6DDmt4FF/download",temp)
-  outDir<-"/tmp"
-  unzip(temp,exdir=outDir)
+  #temp <- tempfile()
+  #download.file("https://nextcloud.sesync.org/index.php/s/SDJ5P4R6DDmt4FF/download",temp)
+  #outDir<-"/tmp"
+  #unzip(temp,exdir=outDir)
   
-  setwd("/tmp/counties_conus")  
+  #setwd("/tmp/counties_conus")  
   
   oldw <- getOption("warn")
   options(warn = -1)
   
  
-  counties_conus <- readShapePoly('UScounties_conus.shp',
+  counties_conus <- readShapePoly('/nfs/soilsesfeedback-data/data/counties/UScounties_conus.shp',
                                   proj4string=CRS
                                   ("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
   projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
