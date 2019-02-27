@@ -1,6 +1,7 @@
 library(pheatmap)
 library(dplyr)
 library(diverse)
+library(PANDA)
 
 simpleCap <- function(x) {
   s <- strsplit(x, " ")[[1]]
@@ -86,12 +87,12 @@ div2002$FIPS <- rownames(div2002)
 div2007$FIPS <- rownames(div2007)
 div2012$FIPS <- rownames(div2012)
 
+## need to rename column headings to include years!!!!
+
 div2002$year <- 2002
 div2007$year <- 2007
 div2012$year <- 2012
 
-div2002_div2007 <- rbind(div2002, div2007, by  = "FIPS")
-racediv <- rbind(div2002_div2007, div2012, by  = "FIPS")
+div2002_div2007 <- plyr::join(div2002, div2007, by  = "FIPS")
+racediv <- plyr::join(div2002_div2007, div2012, by  = "FIPS")
 head(racediv)
-
-write.csv(racediv, file = paste("/nfs/soilsesfeedback-data/data/census/racediversity.csv", sep=""))
