@@ -54,9 +54,9 @@ census2012 <- census5[ which(census5$Year=='2012'), ] #select for only 2002
 census2012 <- census2012 %>%
   select(FIPS, Data.Item, Value)                     #reduce to 3 variables
 
-div2002 <- diversity(census2002, type = "simpson")   #saves diversity measures as dataframe
-div2007 <- diversity(census2007, type = "simpson")
-div2012 <- diversity(census2012, type = "simpson")
+div2002 <- diversity(census2002, type = "entropy")   #saves diversity measures as dataframe
+div2007 <- diversity(census2007, type = "entropy")   #entropy = the Shannon entropy per entity measure, denoted by "H"
+div2012 <- diversity(census2012, type = "entropy")
 
 div2002$FIPS <- rownames(div2002)
 div2007$FIPS <- rownames(div2007)
