@@ -27,6 +27,30 @@ colnames(countyFIPS) <- c("ID", "State", "County", "FIPS")
 
 census2 <- plyr::join(census, countyFIPS, by  = c("State", "County"))
 
+#TranformSexGRM------
+#to transform sex variable
+census_sex <- census2 %>% 
+  # clean value column
+  mutate(value_trim=str_trim(Value)) %>%
+  mutate(Value2=as.character(value_trim)) %>%
+  filter(Value2 != "(D)" & Value2 != "(Z)" & Value2 != "(NA)") %>%
+  select(Year, State, County, Data.Item, Value2) %>%
+  # filter what you want
+  filter(Data.Item %in% c("OPERATORS, (ALL) - NUMBER OF OPERATORS",  "OPERATORS, (ALL), FEMALE - NUMBER OF OPERATORS")) %>%
+  spread(Data.Item, Value2) %>%
+  rename(female_operators=`OPERATORS, (ALL), FEMALE - NUMBER OF OPERATORS`) %>%
+  rename(all_operators=`OPERATORS, (ALL) - NUMBER OF OPERATORS`) %>%
+  mutate(percent_female=as.integer(female_operators)/as.integer(all_operators))
+
+
+
+
+
+
+
+
+
+
 census3 <- census2 %>%
   select(FIPS, Year, Data.Item, Value) 
 census4 <- na.omit(census3) 
