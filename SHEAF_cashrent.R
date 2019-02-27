@@ -1,5 +1,8 @@
 #--Landuse acreage from cornbelt - totals per county
 
+rented_land <- read.csv("https://nextcloud.sesync.org/index.php/s/Dtt6E5FDQtFgDit/download")
+
+
 ag_land_corn <- read.csv("https://nextcloud.sesync.org/index.php/s/P92Df7gYgXKjYXa/download")
 colnames(ag_land_corn) <- c("FIPS", "countycode", "row", "column", "type", "State", "Statecode", "label", "County", "cpubval", "Cropland_Acres", "Percent")
 
