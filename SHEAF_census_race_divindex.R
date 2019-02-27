@@ -70,4 +70,8 @@ div2002_div2007 <- rbind(div2002, div2007, by  = "FIPS")
 racediv <- rbind(div2002_div2007, div2012, by  = "FIPS")
 head(racediv)
 
+racediv[] <- lapply(racediv, function(x) as.numeric(as.character(x))) # convert to numberic variables
+summary(racediv)
+
 write.csv(racediv, file = paste("/nfs/soilsesfeedback-data/data/census/racediversity.csv", sep=""))
+
