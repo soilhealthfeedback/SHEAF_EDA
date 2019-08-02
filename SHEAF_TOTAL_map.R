@@ -105,7 +105,7 @@ library(raster)
  levels(xxx$data.item)[levels(xxx$data.item)=="AG LAND, INCL BUILDINGS - ASSET VALUE, MEASURED IN $ / OPERATION" ] <- "dollars_per_operation"
  levels(xxx$data.item)[levels(xxx$data.item)=="INCOME, FARM-RELATED, RENT, LAND & BUILDINGS - RECEIPTS, MEASURED IN $" ] <- "ag_income"
  
- 
+
  xxx <- subset(xxx, data.item == unit_measure)
  xxx <- data.frame(xxx)
  #id = 1:15

@@ -80,7 +80,7 @@ SHEAF_TOTAL_barplot_county <- function(state, unit_measure) {
   options(warn = -1)
   
   state <- tolower(state)
-  county <- tolower(county)
+  #county <- tolower(county)
   
  xxx <- as.data.frame(xxx)
   

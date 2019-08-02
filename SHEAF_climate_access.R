@@ -20,6 +20,10 @@
 
 netcdf_access <- function(climatevar_short, climatevar, year) {
   
+#climatevar_short <- "pdsi"
+#climatevar <- "palmer_drought_severity_index"
+#year = 2012
+  
   #library("ncdf")
   library("zoo")
   library("raster")
