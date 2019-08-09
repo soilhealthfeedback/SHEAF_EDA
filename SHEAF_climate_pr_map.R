@@ -1,8 +1,22 @@
-#SHEAF_climate_pr.R 
+#SHEAF_climate_pr_map.R 
 #by Erich Seamon
 #
-#writes to a csv the extreme precip events per county for 2008 to 2012
+#creates several maps of data aggregated by county
 
+#maptype setting for function:
+
+# average    1) average number of events per county based on all station data
+# max        2) station with max number of events
+# sd         3) sd of station data by county
+# count      4) number of stations per county
+# cov        5) coefficient of variation per county (sd of precip events / mean)
+
+#use of the five above as the maptype: average, max, sd, count, cov
+#use parentheses!
+
+#EX: SHEAF_climate_pr_map("average")
+
+SHEAF_climate_pr_map <- function(maptype) {
   
   library(rgdal)
   library(leaflet)
@@ -231,7 +245,23 @@ out5 <- merge(out5, out4_sd, by=c("Fips"))
 out5@data$average <- out5@data$Total / out5@data$count
 out5@data$cov <- out5@data$sd / out5@data$average
 
-write.csv(out5, file = "/nfs/soilsesfeedback-data/data/climate/prcpextremes_county_2008_2012.csv")
 
+#map data is a summary of 2008-2012
+
+
+#map 
+
+pal3 <- colorNumeric(rev(brewer.pal(20, "Spectral")), na.color = "#ffffff",
+                     domain = as.numeric(eval(parse(text=paste("out5$", maptype, sep="")))))
+
+label <- paste(sep = "<br/>", out5$County, as.numeric(eval(parse(text=paste("out5$", maptype, sep="")))))
+markers <- data.frame(label)
+labs <- as.list(as.numeric(eval(parse(text=paste("out5$", maptype, sep="")))))
+
+
+leaflet(data = out5) %>% addProviderTiles("Stamen.TonerLite") %>% fitBounds(exte[1], exte[3], exte[2], exte[4]) %>% addPolygons(color = ~pal3(as.numeric(eval(parse(text=paste("out5$", maptype, sep=""))))), popup = markers$label,  weight = 1)
+
+
+}
 
 

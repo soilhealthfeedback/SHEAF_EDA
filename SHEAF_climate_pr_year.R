@@ -1,8 +1,16 @@
-#SHEAF_climate_pr.R 
+#SHEAF_climate_pr_year.R 
 #by Erich Seamon
+#generates a data file of the number of extreme precip events from 2008-2012, aggregated by county
+#original data is from ken kunkel @ noaa who provided extreme precip events per station.
 #
-#writes to a csv the extreme precip events per county for 2008 to 2012
+#creates several maps of data aggregated by county
+#1) average number of events per county based on all station data
+#2) station with max number of events
+#3) sd of station data by county
+#4) number of stations per county
+#5) coefficient of variation per county (sd of precip events / mean)
 
+SHEAF_climate_pr_year <- function(year) {
   
   library(rgdal)
   library(leaflet)
@@ -156,7 +164,7 @@
   #ASSIGN A COLOR USING THE PALETTE BY A RANGE---
   
   pal2 <- colorNumeric(rev(brewer.pal(9, "Spectral")), na.color = "#ffffff",
-                       domain = as.numeric(eval(parse(text=paste("sbt3$`2011`", sep="")))))
+                       domain = as.numeric(eval(parse(text=paste("sbt3$`", year, "`", sep="")))))
   
   #----
   
@@ -177,61 +185,12 @@
   
   #map of stations
   
+
+  leaflet(data = counties_conus) %>% addProviderTiles("Stamen.TonerLite") %>% fitBounds(exte[1], exte[3], exte[2], exte[4]) %>% addPolygons(fillColor = "white", color = "black", stroke = TRUE, weight = .5) %>% 
+    addCircles(sbt3$long, sbt3$lat, popup=as.character(as.numeric(eval(parse(text=paste("sbt3$`", year, "`", sep=""))))), weight = 6, radius=800, 
+                                                       color= ~pal2(as.numeric(eval(parse(text=paste("sbt3$`", year, "`", sep=""))))), stroke = TRUE, fillOpacity = 0.8) 
   
   
-#  leaflet(data = counties_conus) %>% addProviderTiles("Stamen.TonerLite") %>% fitBounds(exte[1], exte[3], exte[2], exte[4]) %>% addPolygons(fillColor = "white", color = "black", stroke = TRUE, weight = .5) %>% 
-#    addCircles(sbt3$long, sbt3$lat, popup=as.character(sbt3$`2011`), weight = 6, radius=800, 
-#                                                       color= ~pal2(as.numeric(sbt3$`2011`)), stroke = TRUE, fillOpacity = 0.8) 
-  
-  
-  
-  library(sf)
- 
-  xy <- sbt3[,c(3,2)]
-  spdf <- SpatialPointsDataFrame(coords = xy, data = sbt3,
-                                 proj4string = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
-  
-  #out <- st_intersection(spdf, counties_conus)
-  out <- intersect(spdf, counties_conus)
-  
-out2 <- cbind.data.frame(out@data[,1:5], out@data[,27:31], out@data[,38:39], out@data[,42])
-colnames(out2) <- c("station", "lat", "long", "z", "station_name", "2008", "2009", "2010", "2011", "2012", "County", "State", "Fips")
-out2$`2008` <- as.numeric(out2$`2008`)
-out2$`2009` <- as.numeric(out2$`2009`)
-out2$`2010` <- as.numeric(out2$`2010`)
-out2$`2011` <- as.numeric(out2$`2011`)
-out2$`2012` <- as.numeric(out2$`2012`)
-
-out3 <- out2 %>%
-  mutate(Total = dplyr:::select(., `2008`:`2009`:`2010`:`2011`:`2012`) %>% rowSums(na.rm = TRUE))
-  #----
-
-
-out4 <- aggregate(out3$Total, by=list(out3$Fips), FUN = "sum")
-out4_max <- aggregate(out3$Total, by=list(out3$Fips), FUN = "max")
-out4_count <- aggregate(out3$Total, by=list(out3$Fips), FUN = "length")
-out4_sd <- aggregate(out3$Total, by=list(out3$Fips), FUN = "sd")
-
-out3a <- out3 %>% count(Fips)
-
-colnames(out4) <- c("Fips", "Total")
-colnames(out4_max) <- c("Fips", "max")
-colnames(out4_count) <- c("Fips", "count")
-colnames(out4_sd) <- c("Fips", "sd")
-
-
-out5 <- merge(counties_conus, out4, by=c("Fips"))
-out5 <- merge(out5, out4_max, by=c("Fips"))
-out5 <- merge(out5, out4_count, by=c("Fips"))
-out5 <- merge(out5, out4_sd, by=c("Fips"))
-
-
-
-
-out5@data$average <- out5@data$Total / out5@data$count
-out5@data$cov <- out5@data$sd / out5@data$average
-
-write.csv(out5, file = "/nfs/soilsesfeedback-data/data/climate/prcpextremes_county_2008_2012.csv")
-
+}
 
 
