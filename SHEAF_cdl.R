@@ -74,13 +74,36 @@ cdlsum4 <- merge(cdl, cdlsum, by = c("fips", "year"))
 
 cdlsum5 <- subset(cdlsum4, Category == "Barley" | Category ==  "Corn" | Category ==  "Hay" | Category ==  "Oats" | Category ==  "Rice" | Category ==  "Sorghum" | Category ==  "Soybeans" | Category ==  "Wheat" | Category == "Winter Wheat" | Category == "Spring Wheat" | Category == "Durum Wheat")
 
+#
+
+tototalcropland <- read.csv("https://files.sesync.org/index.php/s/Ly4TyC3RipXdkSG/download")
+
+totalcropland$state_fips_code <- sprintf("%02d", totalcropland$state_fips_code)
+totalcropland$county_code <- sprintf("%03d", totalcropland$county_code)
+totalcropland$Fips <- paste(totalcropland$state_fips_code, totalcropland$county_code, sep="")
+
+totalcropland <- cbind.data.frame(totalcropland[,13], totalcropland[,21], totalcropland[,41])
+colnames(totalcropland) <- c("Year", "Cropland_Acres", "Fips")
+
+totalcropland$Cropland_Acres <- as.numeric(gsub(",","",totalcropland$Cropland_Acres))
+totalcropland_year <- subset(totalcropland, Year == 2012)
+colnames(totalcropland_year)[3] <- "fips"
+
+
+#--
+
+cdlsum5 <- subset(cdlsum5, year == 2012)
+
+cdlsum5a <- merge(cdlsum5, totalcropland_year, by=c("fips"))
+
 #now calculate the percentage of each crop acreage by county
-cdlsum5$acreage_pct <- cdlsum5$Acreage^2/cdlsum5$total_acreage^2
+cdlsum5a$acreage_pct <- cdlsum5a$Acreage^2/cdlsum5a$Cropland_Acres^2
 
-cdlsum6 <- aggregate(cdlsum5$acreage_pct, by = list(cdlsum5$fips, cdlsum5$year), FUN = "sum")
+cdlsum6 <- aggregate(cdlsum5a$acreage_pct, by = list(cdlsum5a$fips), FUN = "sum")
 cdlsum6$CDI <- 1-cdlsum6$x
-colnames(cdlsum6) <- c("FIPS", "Year", "CDL_ratio", "CDI")
+colnames(cdlsum6) <- c("FIPS", "CDL_ratio", "CDI")
 
+write.csv(cdlsum6, file = paste("/nfs/soilsesfeedback-data/raw_data/cdl/crop_diversity.csv", sep=""))
 
 
 temp <- tempfile()
@@ -88,7 +111,7 @@ download.file("https://nextcloud.sesync.org/index.php/s/SDJ5P4R6DDmt4FF/download
 outDir<-"/tmp"
 unzip(temp,exdir=outDir)
 
-setwd("/tmp/counties_conus")
+setwd("/tmp")
 
 counties <- readShapePoly('UScounties_conus.shp',
                           proj4string=CRS
@@ -98,8 +121,8 @@ projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
 
 #write.csv(cdlsum6, file = "/nfs/soilsesfeedback-data/data/cdl/crop_diversity.csv")
 
-cdlsum7 <- subset(cdlsum6, Year == year)
-
+cdlsum7 <- cdlsum6
+colnames(cdlsum7[1]) <- c("FIPS")
 
 m <- merge(counties, cdlsum7, by=c("FIPS"))
 
@@ -114,7 +137,7 @@ pal2 <- colorNumeric(rev(brewer.pal(40, "Spectral")), na.color = "#ffffff",
 
 exte <- as.vector(extent(counties))
 
-label <- paste(sep = "<br/>", m$STATE_NAME, m$NAME, m$FIPS, m$CDI)
+label <- paste(sep = "<br/>", m$FIPS, m$CDI)
 markers <- data.frame(label)
 labs <- as.list(m$CDI)
 
