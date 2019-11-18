@@ -47,7 +47,8 @@ SHEAF_climate_pr_map <- function(maptype) {
   
   climate_pr_perc_location <- climate_pr_percentile[seq(0, 16179, by=4),]
   climate_pr_perc_location <- data.frame(climate_pr_perc_location)
-  climate_pr_perc_location <- climate_pr_perc_location[24:4044,]
+  #climate_pr_perc_location <- climate_pr_perc_location[24:16179,]
+  #climate_pr_perc_location <- climate_pr_perc_location[24:4044,]
   climate_pr_perc_location <- data.frame(climate_pr_perc_location)
   colnames(climate_pr_perc_location) <- "pr"
   climate_pr_perc_location$pr <- as.character(climate_pr_perc_location$pr)
@@ -61,7 +62,7 @@ SHEAF_climate_pr_map <- function(maptype) {
   
   selectedRows <- stations$station %in% sbt$pr
   stations_pr <- stations[selectedRows,]
-  stations_pr <- stations_pr[4:4020,]
+  #stations_pr <- stations_pr[4:4020,]
   
 #--loading number of days per year exceeding 99% percentile per station
   
@@ -259,7 +260,9 @@ markers <- data.frame(label)
 labs <- as.list(as.numeric(eval(parse(text=paste("out5$", maptype, sep="")))))
 
 
-leaflet(data = out5) %>% addProviderTiles("Stamen.TonerLite") %>% fitBounds(exte[1], exte[3], exte[2], exte[4]) %>% addPolygons(color = ~pal3(as.numeric(eval(parse(text=paste("out5$", maptype, sep=""))))), popup = markers$label,  weight = 1)
+leaflet(data = out5) %>% addProviderTiles("Stamen.TonerLite") %>% fitBounds(exte[1], exte[3], exte[2], exte[4]) %>% addPolygons(color = ~pal3(as.numeric(eval(parse(text=paste("out5$", maptype, sep=""))))), popup = markers$label,  weight = 1) %>% addCircles(stations$long, stations$lat, popup=stations_station, weight = 1, radius=10, 
+                                                                                                                                                                                                                                                             color="#ffa500", stroke = TRUE, fillOpacity = 0.8) %>% addCircles(stations_pr$long, stations_pr$lat, weight = 1, radius=10, 
+                                                                                                                                                                                                                                                                                                                               color="#0000FF", stroke = TRUE, fillOpacity = 0.8)
 
 
 }
